@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <!--
+    ✅ 반응형 메타 태그
+    - initial-scale을 통해 초기 확대 비율을 지정
+    - minimum-scale은 사용자가 화면을 너무 축소하지 못하도록 제한
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=0.8, minimum-scale=0.4">
+  <title>야바위 게임 - 4단계</title>
+  <!-- 별도의 CSS 파일 연결: 스타일은 style.commented.css 에 자세한 주석과 함께 정리 -->
+  <link rel="stylesheet" href="cupgame.css">
+</head>
+<body>
+  <!-- 좌상단 고정 안내 박스: 단계별 정보와 재시도 규칙을 간단히 확인 가능 -->
+  <div class="instructions">
+    <h3>야바위 게임 - 4단계</h3>
+    <p><strong>단계별 난이도:</strong></p>
+    <p>1단계: 3컵, 느림 (보상 1)</p>
+    <p>2단계: 3컵, 빠름 (보상 2)</p>
+    <p>3단계: 5컵, 보통 (보상 5)</p>
+    <p>4단계: 5컵, 매우빠름+깜빡임 (보상 7)</p>
+    <p><strong>재시도:</strong></p>
+    <p>1단계: 무한 / 2단계: X</p>
+    <p>3단계: 1회 / 4단계: 2회</p>
+  </div>
+
+  <!-- 메인 게임 래퍼 -->
+  <div class="game-container">
+    <h1 class="title">야바위 게임</h1>
+
+    <!-- 상단 HUD: 현재 단계/재시도/총 보상 등 간단한 상태 -->
+    <div class="stage-info">
+      <span id="stageText">단계 1 / 4</span>
+      <span id="retryText" style="margin-left: 20px;"></span>
+    </div>
+
+    <!-- 누적 보상 합계 표시 -->
+    <div class="rewards">총 보상: <span id="totalRewards">0</span></div>
+    
+    <!-- 조작 버튼 영역 -->
+    <div class="controls">
+      <button class="btn" id="startBtn">게임 시작</button>
+      <button class="btn" id="resetBtn">처음부터</button>
+    </div>
+    
+    <!-- 캔버스: 컵/공, 안내 텍스트를 모두 여기서 렌더링 -->
+    <canvas id="canvas" width="900" height="500"></canvas>
+
+    <!-- 텍스트 결과/안내 메시지 출력 공간 -->
+    <div class="result" id="result"></div>
+  </div>
+
+  <!-- 로직은 한 파일로 관리: 함수명은 직관적으로 변경, 주석 풍부하게 추가 -->
+  <script src="cupgame.js"></script>
+</body>
+</html>

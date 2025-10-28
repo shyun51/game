@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>동아리부스 게임 선택</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="main">
+      <h1 class="title">동아리부스 게임 선택</h1>
+      <p class="intro">아래에서 체험하고 싶은 게임을 선택하세요.</p>
+
+      <div class="game-selector">
+        <button class="tab is-active" data-target="game-one">게임 1 · 야바위</button>
+        <button class="tab" data-target="game-two">게임 2 · 똥 피하기</button>
+      </div>
+
+      <section id="game-one" class="panel is-active">
+        <h2>야바위 (Cup Game)</h2>
+        <p>4단계 난이도로 진행되는 컵 섞기 게임입니다. 공이 숨은 컵을 끝까지 추적해 보상을 모아 보세요.</p>
+        <div class="actions">
+          <button class="primary" data-action="start-game-one">야바위 시작</button>
+        </div>
+      </section>
+      
+      <section id="game-two" class="panel">
+        <h2>똥 피하기 (PTSD 피하기)</h2>
+        <p>현실 난이도를 단계별로 체험하며 떨어지는 텍스트를 피하는 게임입니다. 스테이지와 휴식 페이즈가 번갈아 진행돼요.</p>
+        <div class="actions">
+          <button class="primary" data-action="start-game-two">똥 피하기 시작</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

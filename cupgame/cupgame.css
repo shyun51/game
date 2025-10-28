@@ -1,0 +1,153 @@
+/* ------------------------------------------------------------------
+   🎨 전역 레이아웃 & 배경
+   - 전체 페이지를 중앙 정렬하고, 그라데이션 배경을 적용합니다.
+   - 글꼴은 OS 기본 가독성 좋은 sans-serif로 지정
+------------------------------------------------------------------- */
+body {
+    margin: 0;
+    height: 100vh; /* viewport 전체 높이 */
+    background: linear-gradient(135deg, rgba(234, 127, 127, 0.72) 0%, rgba(237, 79, 79, 0.85) 100%), url('../cupgameBg.jpg'); /* 보라-파랑 계열 */
+    background-size: 200% 200%, cover;
+    background-position: center, center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* 스크롤바 노출 방지 */
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* 메인 컨테이너: 가운데 정렬 + 흰색 텍스트 */
+  .game-container {
+    text-align: center;
+    color: white;
+  }
+  
+  /* 상단 타이틀: 존재감 있는 크기 + 가벼운 그림자 */
+  .title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  }
+  
+  /* 현재 단계/재시도 등 간단한 상태 정보 */
+  .stage-info {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* 총 보상: 눈에 띄도록 금색 계열 */
+  .rewards {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #ffd700;
+  }
+  
+  /* 버튼 영역 간격 */
+  .controls {
+    margin-bottom: 2rem;
+  }
+  
+  /* ------------------------------------------------------------------
+     🔘 버튼 스타일
+     - 기본: 둥근 캡슐형, 그림자, 부드러운 hover
+     - .go, .stop은 의미 색상 부여 (진행/정지)
+  ------------------------------------------------------------------- */
+  .btn {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border-radius: 25px;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+  
+  .btn:hover {
+    background: #ff5252;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  }
+  
+  .btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  /* 다음 단계 진행(GO) 버튼 */
+  .btn.go {
+    background: #4CAF50;
+  }
+  
+  .btn.go:hover {
+    background: #45a049;
+  }
+  
+  /* 보상 받고 종료(STOP) 버튼 */
+  .btn.stop {
+    background: #f44336;
+  }
+  
+  .btn.stop:hover {
+    background: #da190b;
+  }
+  
+  /* ------------------------------------------------------------------
+     🖼️ 캔버스 카드 스타일
+     - 반투명 유리 느낌(blur) + 둥근 모서리 + 깊은 그림자
+  ------------------------------------------------------------------- */
+  canvas {
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px); /* 유리 패널 느낌 */
+  }
+  
+  /* 결과 텍스트: 큼직하고 두껍게 */
+  .result {
+    font-size: 2rem;
+    margin-top: 1rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  }
+  
+  /* 좌상단 고정 안내 박스: 반투명 배경 + 작은 폰트 */
+  .instructions {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(0,0,0,0.7);
+    padding: 15px;
+    border-radius: 10px;
+    color: white;
+    font-size: 0.9rem;
+    max-width: 300px;
+  }
+  
+  /* ------------------------------------------------------------------
+     ✨ 깜빡임 효과 (flash)
+     - 자바스크립트에서 .flash 클래스를 토글하여 깜빡이는 연출
+     - 현재 키프레임은 0 → 1 → 0 (강한 깜빡임)
+     - 속도는 JS setInterval 주기로 조절 (예: 100ms)
+  ------------------------------------------------------------------- */
+  .flash {
+    animation: flash 2s ease-in-out;
+  }
+  
+  @keyframes flash {
+    0%, 100% { opacity: 0; }  /* 시작/끝: 완전 투명 */
+    50% { opacity: 1; }       /* 중간: 완전 불투명 */
+  }
+  
+  /* 🔧 깜빡임 커스터마이즈 팁
+   * - 밝은 깜빡임(현재): 0 → 1 → 0
+   * - 어두운 깜빡임: 1 → 0.3 → 1
+   * - 부드러운 깜빡임: 0.8 → 0.2 → 0.8
+   * - 강한 깜빡임: 0 → 1 → 0 (동일)
+   */
+  

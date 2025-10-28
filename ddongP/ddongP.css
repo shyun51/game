@@ -1,0 +1,206 @@
+/* =========================================================================
+   똥피하기(텍스트 피하기) 게임 — 스타일시트
+   - 목적: 가독성과 조작성 향상을 위한 글라스모피즘 UI
+   - 스테이지별 전용 배경 이미지를 깔고 CSS 그라데이션 오버레이 전환
+   - 점수/타이머/HUD/컨트롤/모바일 터치 패드 스타일 정의
+   - 핵심 원칙: 성능 유지(필요한 최소한의 그림자/블러), 테마 일관성
+   ========================================================================= */
+
+/* 공통 리셋 & 글꼴 설정 */
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; padding: 0; }
+
+/* CSS 변수: 밝은 테마 기준 기본값 */
+:root{
+  /* 반투명 카드/헤더 배경 (글라스모피즘 느낌) */
+  --glass-bg: rgba(255,255,255,0.35);
+  /* 카드/헤더 경계선 */
+  --glass-border: rgba(0,0,0,0.06);
+  /* 본문 텍스트 색 */
+  --ink: #111;
+  /* 약한 텍스트 색(세퍼레이터/힌트 등) */
+  --ink-weak: rgba(0,0,0,0.6);
+  /* 캔버스 외곽 카드 배경 */
+  --card-bg: rgba(255,255,255,0.45);
+  --stage-overlay: linear-gradient(180deg, rgba(255, 248, 225, 0.65), rgba(255, 224, 178, 0.78));
+  --stage-image: url('../ddong_img_1.jpg');
+}
+
+/* 전체 바디 기본 스타일 */
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  color: var(--ink);
+  overflow: hidden;               /* 스크롤 방지: 게임 전체를 하나의 화면에 고정 */
+  background-image: var(--stage-overlay), var(--stage-image);
+  background-size: 200% 200%, cover;
+  background-position: top center, center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  transition: background-image 600ms ease, color 300ms ease; /* 단계 전환 시 부드러운 변화 */
+}
+
+/* -------------------------------
+   단계별 배경 (이미지 없이 그라데이션)
+   - stageN 클래스를 body에 붙여 전환
+   ------------------------------- */
+.stage1 {
+  --stage-overlay: linear-gradient(180deg, rgba(255, 248, 225, 0.65), rgba(255, 224, 178, 0.78));
+  --stage-image: url('../ddong_img_1.jpg');
+}   /* 가족편: 따뜻한 베이지 */
+.stage2 {
+  --stage-overlay: linear-gradient(180deg, rgba(232, 245, 233, 0.63), rgba(200, 230, 201, 0.78));
+  --stage-image: url('../ddong_img_2.jpg');
+}   /* 수업편: 교실 초록톤 */
+.stage3 {
+  --stage-overlay: linear-gradient(180deg, rgba(227, 242, 253, 0.6), rgba(144, 202, 249, 0.76));
+  --stage-image: url('../ddong_img_3.jpg');
+}   /* 학업편: 푸른 긴장감 */
+.stage4 {
+  --stage-overlay: linear-gradient(180deg, rgba(22, 22, 22, 0.7), rgba(52, 52, 52, 0.78));
+  --stage-image: url('../ddong_img_4.jpg');
+  color: #f5f5f5;
+} /* 사회편: 다크 */
+
+/* 다크 스테이지(stage4)에서의 변수 오버라이드
+   - 글라스 배경/보더를 어둡게 변경 */
+.stage4 :root,
+.stage4 body{
+  --glass-bg: rgba(0,0,0,0.35);
+  --glass-border: rgba(255,255,255,0.1);
+  --ink: #f5f5f5;
+  --ink-weak: rgba(255,255,255,0.75);
+  --card-bg: rgba(0,0,0,0.35);
+}
+
+/* -------------------------------
+   상단 HUD (점수/시간/스테이지 표시)
+   ------------------------------- */
+.hud {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px;
+  /* 글라스모피즘: 배경 블러 + 색상 살짝 진하게 */
+  backdrop-filter: blur(8px) saturate(1.1);
+  background: var(--glass-bg);
+  border-bottom: 1px solid var(--glass-border);
+  z-index: 10; /* 캔버스/오버레이 위에 위치하도록 */
+}
+
+/* HUD 타이틀(스테이지 이름) 강조 */
+.hud-title{ font-weight: 800; letter-spacing: .2px; }
+
+/* 세퍼레이터 라인 ( | ) */
+.hud .sep { opacity: 0.6; margin: 0 8px; }
+
+/* HUD 칩(점수/최고점/타이머)을 동그랗게 */
+.hud-chip{
+  display: inline-flex; align-items: center; gap:6px;
+  padding: 6px 10px; border-radius: 999px;
+  background: var(--card-bg); border: 1px solid var(--glass-border);
+  font-weight: 700;
+}
+/* 숫자 폭 고정: 점수가 바뀌어도 좌우 흔들림 줄임 */
+.hud-chip b{ font-variant-numeric: tabular-nums; }
+/* 보조 칩(최고점 등)은 약간 약하게 */
+.hud-chip.ghost{ opacity: .8; font-weight: 600; }
+
+/* -------------------------------
+   게임 영역(캔버스 컨테이너)
+   ------------------------------- */
+.game-wrap {
+  position: absolute; inset: 60px 0 78px 0; /* HUD(60px)와 하단 컨트롤(78px) 공간 제외 */
+  display: grid; place-items: center;       /* 중앙 정렬 */
+}
+
+/* 캔버스를 반응형으로 보여주되, 내부 픽셀은 1024x576 고정
+   - CSS의 aspect-ratio로 비율 유지
+   - 외곽 카드는 반투명(글라스)로 디자인 */
+canvas#game {
+  width: min(96vw, 1024px);
+  height: auto;
+  aspect-ratio: 1024 / 576;
+  border-radius: 18px;
+  background: var(--card-bg);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.18);
+  border: 1px solid var(--glass-border);
+}
+
+/* -------------------------------
+   중앙 메시지 (스테이지 전환/휴식 안내/게임오버)
+   ------------------------------- */
+.message {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  font-weight: 900; letter-spacing: 0.5px;
+  text-align: center;
+  pointer-events: none;      /* 클릭/터치 방해하지 않도록 */
+}
+.message.hidden { display: none; }
+.message span {
+  display: inline-block;
+  padding: 16px 22px;
+  border-radius: 14px;
+  background: rgba(0,0,0,0.7); /* 어두운 오버레이 */
+  color: #fff;
+  font-size: clamp(18px, 4vw, 30px); /* 화면 크기에 따라 크기 반응 */
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+}
+
+/* -------------------------------
+   대형 점수 오버레이 (캔버스 상단 중앙)
+   - HUD 외에 한눈에 점수 파악 가능하도록
+   ------------------------------- */
+.score-big{
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: clamp(18px, 5vw, 42px);
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0,0,0,.35);
+  background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.35));
+  border: 1px solid rgba(255,255,255,.25);
+  pointer-events: none;     /* 점수는 클릭 불가 */
+}
+
+/* -------------------------------
+   하단 컨트롤(버튼/힌트)
+   ------------------------------- */
+.controls {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  height: 78px; display: flex; align-items: center; gap: 8px;
+  padding: 0 12px;
+  backdrop-filter: blur(8px) saturate(1.1);
+  background: var(--glass-bg);
+  border-top: 1px solid var(--glass-border);
+}
+.controls button {
+  height: 42px; padding: 0 14px; border-radius: 12px;
+  background: #111; color: #fff; border: none; cursor: pointer;
+  font-weight: 800; letter-spacing: .2px;
+  transition: transform .05s ease; /* 눌림 피드백 */
+}
+.stage4 .controls button { background: #f5f5f5; color: #111; }
+.controls button:active{ transform: translateY(1px); }
+.controls .hint { margin-left: auto; opacity: 0.7; font-size: 14px; }
+
+/* -------------------------------
+   모바일 터치 패드 (좌/우)
+   - 넓은 화면(>=900px)에서는 숨김
+   ------------------------------- */
+.touch {
+  position: absolute; bottom: 16px; width: 25vw; max-width: 180px; height: 100px;
+  display: grid; place-items: center;
+  border-radius: 16px;
+  background: rgba(0,0,0,0.2);
+  color: #fff; font-size: 28px; font-weight: 900;
+  user-select: none;
+  border: 1px solid rgba(255,255,255,0.25);
+}
+.touch.left { left: 16px; }
+.touch.right { right: 16px; }
+@media (min-width: 900px) {
+  .touch { display: none; } /* 데스크톱에서는 숨김 */
+}

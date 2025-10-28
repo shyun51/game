@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, user-scalable=no" />
+  <title>현실 난이도 상승 — 피하기 게임</title>
+  <link rel="stylesheet" href="ddongP.css" />
+</head>
+<body class="stage1">
+  <!-- 상단 HUD -->
+  <header class="hud">
+    <div class="hud-left">
+      <strong id="stageName" class="hud-title">1단계 · 가족편</strong>
+      <span class="sep">|</span>
+      <span class="hud-chip">남은 시간 <b id="timeLeft">20.0</b>s</span>
+    </div>
+    <div class="hud-right">
+      <span class="hud-chip">점수 <b id="score">0</b></span>
+      <span class="hud-chip ghost">최고 <b id="bestScore">0</b></span>
+    </div>
+  </header>
+
+  <!-- 게임 캔버스 -->
+  <main class="game-wrap" id="gameWrap">
+    <canvas id="game" width="1024" height="576" aria-label="피하기 게임 캔버스"></canvas>
+
+    <!-- 중앙 메시지(스테이지 전환, 게임오버 등) -->
+    <div id="message" class="message hidden"></div>
+
+    <!-- ★ 대형 점수 오버레이 (가독성 강화) -->
+    <div id="scoreBig" class="score-big">0</div>
+
+    <!-- 모바일 터치 패드 -->
+    <div class="touch left" id="touchLeft" aria-hidden="true">◀</div>
+    <div class="touch right" id="touchRight" aria-hidden="true">▶</div>
+  </main>
+
+  <!-- 하단 컨트롤 -->
+  <footer class="controls">
+    <button id="btnStart">게임 시작</button>
+    <button id="btnPause">일시정지</button>
+    <button id="btnRestart">다시 시작</button>
+    <span class="hint">조작: ←/→ 또는 A/D, 모바일은 좌/우 터치</span>
+  </footer>
+
+  <script src="ddongP.js"></script>
+</body>
+</html>
