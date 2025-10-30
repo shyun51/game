@@ -15,6 +15,20 @@ const resultElement = document.getElementById("result");
 const startBtn = document.getElementById("startBtn");
 const resetBtn = document.getElementById("resetBtn");
 
+// 캔버스 배경 이미지 로드 (data-bg 속성으로 경로 지정)
+const backgroundSrc = canvas.dataset.bg;
+const backgroundImage = new Image();
+let backgroundReady = false;
+if (backgroundSrc) {
+  backgroundImage.src = backgroundSrc;
+  backgroundImage.addEventListener('load', () => {
+    backgroundReady = true;
+  });
+  backgroundImage.addEventListener('error', () => {
+    console.warn('캔버스 배경 이미지를 불러오지 못했습니다.');
+  });
+}
+
 // --------- 게임 전역 상태값 ------------------------------------------
 // gameState: 'ready' (라운드 준비) → 'mixing' (섞는 중) → 'selecting' (플레이어 선택)
 //            → 'result' (정오답 표시) → 'choice' (GO/STOP) → 'final' (최종 보상 표시)
@@ -35,9 +49,9 @@ let showCupNumbers = false;    // Alt+M으로 컵 번호 표기 토글
 // swaps: 교환 횟수 (많을수록 난이도 ↑)
 // retries: 재시도 가능 횟수 (Infinity는 무한)
 const stageConfig = {
-  1: { cups: 3, speed: 50, swaps: 4,  retries: Infinity, reward: 1 },
-  2: { cups: 3, speed: 30, swaps: 6,  retries: 0,        reward: 2 },
-  3: { cups: 5, speed: 20, swaps: 15, retries: 1,        reward: 5 },
+  1: { cups: 3, speed: 30, swaps: 6,  retries: Infinity, reward: 1 },
+  2: { cups: 3, speed: 15, swaps: 14,  retries: 0,        reward: 2 },
+  3: { cups: 5, speed: 15, swaps: 15, retries: 1,        reward: 5 },
   4: { cups: 5, speed: 10, swaps: 30, retries: 2,        reward: 7, flash: true }
 };
 
@@ -515,13 +529,30 @@ function presentFinalRewards() {
 
 // 1 프레임 그리기
 function drawFrame() {
-  // 배경 그라데이션
-  const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-  gradient.addColorStop(0, '#667eea');
-  gradient.addColorStop(1, '#764ba2');
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  if (backgroundReady) {
+    ctx.save();
+    ctx.filter = 'saturate(0.85)';
+    const scale = 1.27;
+    const drawWidth = canvas.width * scale + 85;
+    const drawHeight = canvas.height * scale;
+    const offsetX = (canvas.width - drawWidth) / 2;
+    const offsetY = (canvas.height - drawHeight) / 2;
+    ctx.drawImage(backgroundImage, offsetX, offsetY, drawWidth, drawHeight);
+    ctx.restore();
+
+    // 살짝 어둡게 덮어 대비 확보
+    ctx.save();
+    ctx.fillStyle = 'rgba(15, 21, 32, 0.35)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.restore();
+  } else {
+    // 이미지가 아직 없을 때의 기본 배경
+    ctx.fillStyle = '#1f2937';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
   // 컵/공 렌더링
   cups.forEach(cup => cup.draw());
   

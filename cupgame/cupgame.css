@@ -6,22 +6,42 @@
 body {
     margin: 0;
     height: 100vh; /* viewport 전체 높이 */
-    background: linear-gradient(135deg, rgba(234, 127, 127, 0.72) 0%, rgba(237, 79, 79, 0.85) 100%), url('../cupgameBg.jpg'); /* 보라-파랑 계열 */
-    background-size: 200% 200%, cover;
-    background-position: center, center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden; /* 스크롤바 노출 방지 */
     font-family: 'Arial', sans-serif;
+    background: #0b1220; /* 이미지 로드 전 대비용 */
+    color: white;
   }
-  
+
+  body::before,
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  body::before {
+    background: url('../Super Ace High Poker is the Ultimate Game for Poker Enthusiasts.jpg') center/cover no-repeat;
+    filter: blur(2px) saturate(0.55);
+    transform: scale(1.05);
+    z-index: -2;
+  }
+
+  body::after {
+    background: linear-gradient(135deg, rgba(13, 20, 32, 0.78), rgba(9, 17, 31, 0.82));
+    z-index: -1;
+  }
+
   /* 메인 컨테이너: 가운데 정렬 + 흰색 텍스트 */
   .game-container {
+    position: relative;
     text-align: center;
     color: white;
+    z-index: 1;
   }
   
   /* 상단 타이틀: 존재감 있는 크기 + 가벼운 그림자 */
@@ -127,6 +147,7 @@ body {
     color: white;
     font-size: 0.9rem;
     max-width: 300px;
+    z-index: 1;
   }
   
   /* ------------------------------------------------------------------
