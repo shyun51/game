@@ -108,11 +108,11 @@ const stages = [
  */
 const phasePlan = [
   { type: 'stage', stage: 0, duration: 20 },     // D1 25s
-  { type: 'rest',  duration: 1, nextStage: 1 }, // 10s 휴식
+  { type: 'rest',  duration: 5, nextStage: 1 }, // 10s 휴식
   { type: 'stage', stage: 1, duration: 20 },     // D2 25s
-  { type: 'rest',  duration: 1, nextStage: 2 }, // 10s 휴식
+  { type: 'rest',  duration: 5, nextStage: 2 }, // 10s 휴식
   { type: 'stage', stage: 2, duration: 20 },     // D3 25s
-  { type: 'rest',  duration: 1, nextStage: 3 }, // 15s 휴식
+  { type: 'rest',  duration: 10, nextStage: 3 }, // 15s 휴식
   { type: 'stage', stage: 3, duration: 15, final: true }, // D4 10s (끝판왕)
 ];
 
