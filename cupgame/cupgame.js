@@ -179,7 +179,7 @@ function layoutCups(numCups) {
 }
 
 // (2) 한 라운드를 준비 상태로 초기화
-function setupRound() {
+function setupRound({ preserveRetries = false } = {}) {
   // 4단계 깜빡임이 남아있다면 정리
   if (flashInterval) {
     clearInterval(flashInterval);
@@ -204,7 +204,9 @@ function setupRound() {
   ballCupIndex = Math.floor(Math.random() * config.cups);
   
   cups.forEach(cup => (cup.isSelected = false));
-  retriesLeft = config.retries;
+  if (!preserveRetries) {
+    retriesLeft = config.retries;
+  }
   
   updateHud();
   resultElement.textContent = '';
@@ -407,7 +409,7 @@ function handleCupClick(cupIndex) {
           }
           isInRetryAttempt = true;
           resultElement.textContent = '재시도 가능!';
-          setTimeout(() => setupRound(), 1000);
+          setTimeout(() => setupRound({ preserveRetries: true }), 1000);
         } else {
           // 더 이상 재시도 불가 → 게임 리셋 (확정 보상만 유지)
           resultElement.textContent = '게임 오버! 처음부터 다시 시작합니다.';
